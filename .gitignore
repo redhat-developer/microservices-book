@@ -1,5 +1,9 @@
 # Compiled class file
 *.class
+**/target/*
+
+#Hidden files
+.*
 
 # Log file
 *.log
