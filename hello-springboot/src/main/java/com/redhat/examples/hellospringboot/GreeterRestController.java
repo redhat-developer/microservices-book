@@ -42,6 +42,9 @@ public class GreeterRestController {
                         "http://%s:%d/api/backend?greeting={greeting}",
                         backendServiceHost, backendServicePort);
 
+        System.out.println("Sending to: " + backendServiceUrl);
+
+
         BackendDTO response = template.getForObject(
                 backendServiceUrl, BackendDTO.class, saying);
 
