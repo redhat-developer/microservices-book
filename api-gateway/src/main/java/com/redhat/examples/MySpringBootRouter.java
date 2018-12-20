@@ -23,19 +23,13 @@ import java.util.*;
 @ConfigurationProperties(prefix="gateway")
 public class MySpringBootRouter extends RouteBuilder {
 
-    private String springbootsvcurl;
-
-    private String microprofilesvcurl;
+    private String springbootsvcurl, microprofilesvcurl;
 
     private static final String REST_ENDPOINT=
             "http4:%s/api/greeting?httpClient.connectTimeout=1000&bridgeEndpoint=true&copyHeaders=true&connectionClose=true";
 
     @Override
-    public void configure() throws IOException {
-        restConfiguration()
-                .enableCORS(true)
-                .bindingMode(RestBindingMode.json);
-
+    public void configure() {
         from("direct:microprofile").streamCaching()
                 .to(String.format(REST_ENDPOINT, microprofilesvcurl))
                 .log("Response from Microprofile microservice: ${body}")
@@ -49,8 +43,7 @@ public class MySpringBootRouter extends RouteBuilder {
                 .end();
 
         rest()
-            .get("/gateway")
-            .consumes("application/json").produces("application/json")
+            .get("/gateway").enableCORS(true)
             .route()
                 .multicast(AggregationStrategies.flexible().accumulateInCollection(ArrayList.class))
                 .parallelProcessing()
