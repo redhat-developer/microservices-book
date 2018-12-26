@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-microprofile
+  labels:
+    app: hello-microprofile
+spec:
+  ports:
+  - name: http
+    port: 8080
+  selector:
+    app: hello-microprofile
