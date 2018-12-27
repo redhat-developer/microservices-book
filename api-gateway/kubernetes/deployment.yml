@@ -22,9 +22,9 @@ spec:
         - name: JAVA_OPTIONS
           value: -Xms128m -Xmx256m -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:///dev/./urandom
         - name: GATEWAY_SPRINGBOOTSVCURL
-          value: hello-springboot
+          value: hello-springboot:8080
         - name: GATEWAY_MICROPROFILESVCURL
-          value: hello-microprofile
+          value: hello-microprofile:8080
         image: rhdevelopers/api-gateway:1.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
