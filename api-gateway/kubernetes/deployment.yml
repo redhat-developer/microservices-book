@@ -21,8 +21,10 @@ spec:
       - env:
         - name: JAVA_OPTIONS
           value: -Xms128m -Xmx256m -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:///dev/./urandom
-        - name: GREETING_BACKENDSERVICEHOST
-          value: backend
+        - name: SPRINGBOOTSVCURL
+          value: hello-springboot
+        - name: MICROPROFILESVCURL
+          value: hello-microprofile
         image: rhdevelopers/api-gateway:1.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
