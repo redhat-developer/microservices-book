@@ -24,10 +24,10 @@ spec:
         image: rhdevelopers/backend:1.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
-          exec:
-            command:
-            - curl
-            - localhost:8080/api/backend
+          httpGet: # make an HTTP request
+              port: 8080 # port to use
+              path: /api/backend # endpoint to hit
+              scheme: HTTP # or HTTPS
           initialDelaySeconds: 20
           periodSeconds: 5
           timeoutSeconds: 1
@@ -37,10 +37,10 @@ spec:
           name: http
           protocol: TCP
         readinessProbe:
-          exec:
-            command:
-            - curl
-            - localhost:8080/api/backend
+          httpGet: # make an HTTP request
+              port: 8080 # port to use
+              path: /api/backend # endpoint to hit
+              scheme: HTTP # or HTTPS
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 1

@@ -26,10 +26,10 @@ spec:
         image: rhdevelopers/hello-springboot:1.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
-          exec:
-            command:
-            - curl
-            - localhost:8080/actuator/health
+          httpGet: # make an HTTP request
+              port: 8080 # port to use
+              path: /actuator/health # endpoint to hit
+              scheme: HTTP # or HTTPS
           initialDelaySeconds: 20
           periodSeconds: 5
           timeoutSeconds: 1
@@ -39,10 +39,10 @@ spec:
           name: http
           protocol: TCP
         readinessProbe:
-          exec:
-            command:
-            - curl
-            - localhost:8080/actuator/health
+          httpGet: # make an HTTP request
+              port: 8080 # port to use
+              path: /actuator/health # endpoint to hit
+              scheme: HTTP # or HTTPS
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 1
