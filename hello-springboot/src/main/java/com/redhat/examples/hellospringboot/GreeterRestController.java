@@ -16,6 +16,7 @@
  */
 package com.redhat.examples.hellospringboot;
 
+import com.netflix.hystrix.contrib.javanica.annotation.*;
 import org.springframework.boot.context.properties.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
@@ -35,6 +36,7 @@ public class GreeterRestController {
 
     @RequestMapping(value = "/greeting",
             method = RequestMethod.GET, produces = "text/plain")
+    @HystrixCommand(fallbackMethod = "fallback")
     public String greeting(){
 
         String backendServiceUrl =
@@ -51,6 +53,12 @@ public class GreeterRestController {
         return response.getGreeting() + " at host: " +
                 response.getIp();
     }
+
+    public String fallback(){
+        return saying + " at host "  +
+                System.getenv("HOSTNAME") + " - (fallback)";
+    }
+
 
     public void setSaying(String saying) {
         this.saying = saying;

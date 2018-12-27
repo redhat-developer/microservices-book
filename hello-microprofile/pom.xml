@@ -62,5 +62,11 @@
             <groupId>io.thorntail</groupId>
             <artifactId>microprofile-restclient</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>microprofile-fault-tolerance</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

@@ -1,6 +1,7 @@
 package com.redhat.examples.hellomicroprofile.rest;
 
 import org.eclipse.microprofile.config.inject.*;
+import org.eclipse.microprofile.faulttolerance.*;
 import org.eclipse.microprofile.rest.client.*;
 import org.jboss.resteasy.plugins.providers.*;
 import org.jboss.resteasy.spi.*;
@@ -29,6 +30,9 @@ public class GreeterRestController {
     @GET
     @Produces("text/plain")
     @Path("greeting")
+    @CircuitBreaker
+    @Timeout
+    @Fallback(fallbackMethod = "fallback")
     public String greeting() throws MalformedURLException {
         String backendServiceUrl = String.format("http://%s:%d",
                 backendServiceHost,backendServicePort);
@@ -45,6 +49,11 @@ public class GreeterRestController {
 
         return backendDTO.getGreeting()
                 + " at host: " + backendDTO.getIp();
+    }
+
+    public String fallback(){
+        return saying + " at host "  +
+        System.getenv("HOSTNAME") + " - (fallback)";
     }
 
 }
