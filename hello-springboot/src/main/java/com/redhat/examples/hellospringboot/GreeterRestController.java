@@ -17,20 +17,29 @@
 package com.redhat.examples.hellospringboot;
 
 import com.netflix.hystrix.contrib.javanica.annotation.*;
+import io.opentracing.*;
+import io.opentracing.contrib.spring.web.client.*;
+import io.opentracing.contrib.tracerresolver.*;
+import io.opentracing.propagation.*;
+import io.opentracing.tag.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.context.properties.*;
+import org.springframework.boot.web.client.*;
+import org.springframework.context.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
+
+import javax.servlet.http.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
 @ConfigurationProperties(prefix="greeting")
 public class GreeterRestController {
 
-    private RestTemplate template = new RestTemplate();
+    private RestTemplate template = new RestTemplateBuilder().build();
 
-    private String saying;
-
-    private String backendServiceHost;
+    private String saying, backendServiceHost;
 
     private int backendServicePort;
 
@@ -38,6 +47,9 @@ public class GreeterRestController {
             method = RequestMethod.GET, produces = "text/plain")
     @HystrixCommand(fallbackMethod = "fallback")
     public String greeting(){
+        Tracer tracer = TracerResolver.resolveTracer();
+
+        template.setInterceptors(Collections.singletonList(new TracingRestTemplateInterceptor(tracer)));
 
         String backendServiceUrl =
                 String.format(
@@ -58,7 +70,6 @@ public class GreeterRestController {
         return saying + " at host "  +
                 System.getenv("HOSTNAME") + " - (fallback)";
     }
-
 
     public void setSaying(String saying) {
         this.saying = saying;

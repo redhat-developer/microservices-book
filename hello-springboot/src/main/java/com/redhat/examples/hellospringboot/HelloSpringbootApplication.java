@@ -16,9 +16,12 @@
  */
 package com.redhat.examples.hellospringboot;
 
+import io.opentracing.*;
+import io.opentracing.contrib.tracerresolver.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.*;
+import org.springframework.context.annotation.*;
 
 @EnableCircuitBreaker
 @SpringBootApplication

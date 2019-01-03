@@ -17,12 +17,17 @@
 package com.redhat.examples.backend;
 
 import com.fasterxml.jackson.databind.*;
+import io.opentracing.*;
+import io.opentracing.contrib.tracerresolver.*;
+
+import io.opentracing.propagation.*;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 /**
  * Created by ceposta
@@ -31,8 +36,26 @@ import java.net.*;
 @WebServlet(urlPatterns = {"/api/backend"})
 public class BackendHttpServlet extends HttpServlet {
 
+    private Tracer tracer = TracerResolver.resolveTracer();
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        //Place the HTTP headers in a Hashmap
+        final HashMap<String, String> headers = new HashMap<String, String>();
+        Enumeration<String> headerNames = req.getHeaderNames();
+        while (headerNames.hasMoreElements()){
+            String name = headerNames.nextElement();
+            String value = req.getHeader(name);
+            headers.put(name, value);
+        }
+        //Extract the Parent Span from the headers
+        SpanContext parentSpan = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers));
+
+        //Start a new Span as a Child of the Parent Span
+        Scope scope = tracer.buildSpan("backend-servlet").asChildOf(parentSpan).startActive(true);
+
         resp.setContentType("application/json");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -46,6 +69,8 @@ public class BackendHttpServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         mapper.writerWithDefaultPrettyPrinter()
                 .writeValue(out, response);
+
+        scope.span().finish();
     }
 
     private String getIp() {

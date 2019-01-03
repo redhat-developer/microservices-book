@@ -1,7 +1,13 @@
 package com.redhat.examples.hellomicroprofile.rest;
 
+import io.opentracing.*;
+import io.opentracing.Scope;
+import io.opentracing.contrib.jaxrs2.client.*;
+import io.opentracing.contrib.tracerresolver.*;
+import io.opentracing.propagation.*;
 import org.eclipse.microprofile.config.inject.*;
 import org.eclipse.microprofile.faulttolerance.*;
+import org.eclipse.microprofile.opentracing.*;
 import org.eclipse.microprofile.rest.client.*;
 import org.jboss.resteasy.plugins.providers.*;
 import org.jboss.resteasy.spi.*;
@@ -11,6 +17,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 import java.net.*;
+import java.util.*;
 
 @Path("/api")
 public class GreeterRestController {
@@ -27,19 +34,24 @@ public class GreeterRestController {
     @ConfigProperty(name = "greeting.backendServicePort", defaultValue = "8080")
     private int backendServicePort;
 
+
     @GET
     @Produces("text/plain")
     @Path("greeting")
     @CircuitBreaker
     @Timeout
     @Fallback(fallbackMethod = "fallback")
-    public String greeting() throws MalformedURLException {
+    @Traced
+    public String greeting() {
+
         String backendServiceUrl = String.format("http://%s:%d",
                 backendServiceHost,backendServicePort);
 
         System.out.println("Sending to: " + backendServiceUrl);
 
-        Client client = ClientBuilder.newClient();
+        Client client = ClientTracingRegistrar
+                .configure(ClientBuilder.newBuilder()).build();
+
         BackendDTO backendDTO = client.target(backendServiceUrl)
                 .path("api")
                 .path("backend")

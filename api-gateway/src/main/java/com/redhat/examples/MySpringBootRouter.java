@@ -5,7 +5,9 @@ import org.apache.camel.*;
 import org.apache.camel.builder.*;
 import org.apache.camel.model.dataformat.*;
 import org.apache.camel.model.rest.*;
+import org.apache.camel.opentracing.*;
 import org.apache.camel.util.toolbox.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.context.properties.*;
 import org.springframework.stereotype.*;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,8 @@ public class MySpringBootRouter extends RouteBuilder {
     private String springbootsvcurl, microprofilesvcurl;
 
     private static final String REST_ENDPOINT=
-            "http4:%s/api/greeting?httpClient.connectTimeout=1000&bridgeEndpoint=true&copyHeaders=true&connectionClose=true";
+            "http4:%s/api/greeting?httpClient.connectTimeout=1000" +
+                    "&bridgeEndpoint=true&copyHeaders=true&connectionClose=true";
 
     @Override
     public void configure() {
@@ -45,7 +48,8 @@ public class MySpringBootRouter extends RouteBuilder {
         rest()
             .get("/gateway").enableCORS(true)
             .route()
-                .multicast(AggregationStrategies.flexible().accumulateInCollection(ArrayList.class))
+                .multicast(AggregationStrategies.flexible()
+                        .accumulateInCollection(ArrayList.class))
                 .parallelProcessing()
                     .to("direct:microprofile")
                     .to("direct:springboot")
