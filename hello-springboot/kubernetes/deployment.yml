@@ -4,6 +4,7 @@ metadata:
   name: hello-springboot
   labels:
     app: hello-springboot
+    book: microservices4javadev
     version: v1
 spec:
   replicas: 1
@@ -15,6 +16,7 @@ spec:
     metadata:
       labels:
         app: hello-springboot
+        book: microservices4javadev
         version: v1
     spec:
       containers:

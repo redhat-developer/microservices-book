@@ -4,6 +4,7 @@ metadata:
   name: hello-springboot
   labels:
     app: hello-springboot
+    book: microservices4javadev
 spec:
   ports:
   - name: http

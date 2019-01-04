@@ -4,6 +4,7 @@ metadata:
   name: hello-microprofile
   labels:
     app: hello-microprofile
+    book: microservices4javadev
 spec:
   ports:
   - name: http

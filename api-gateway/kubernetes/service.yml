@@ -4,6 +4,7 @@ metadata:
   name: api-gateway
   labels:
     app: api-gateway
+    book: microservices4javadev
 spec:
   ports:
   - name: http

@@ -30,7 +30,13 @@ import java.net.*;
 import java.util.*;
 
 /**
- * Created by ceposta
+ * Created by
+ * rafabene
+ * <a href="http://rafabene.com/>http://rafabene.com/</a>.
+ *
+ * and
+ *
+ * ceposta
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
 @WebServlet(urlPatterns = {"/api/backend"})
@@ -51,10 +57,15 @@ public class BackendHttpServlet extends HttpServlet {
             headers.put(name, value);
         }
         //Extract the Parent Span from the headers
-        SpanContext parentSpan = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers));
+        SpanContext parentSpan = tracer
+                .extract(Format.Builtin.HTTP_HEADERS,
+                        new TextMapExtractAdapter(headers));
 
         //Start a new Span as a Child of the Parent Span
-        Scope scope = tracer.buildSpan("backend-servlet").asChildOf(parentSpan).startActive(true);
+        Scope scope = tracer
+                .buildSpan("backend-servlet")
+                .asChildOf(parentSpan)
+                .startActive(true);
 
         resp.setContentType("application/json");
 

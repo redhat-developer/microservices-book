@@ -17,7 +17,13 @@
 package com.redhat.examples.backend;
 
 /**
- * Created by ceposta 
+ * Created by
+ * rafabene
+ * <a href="http://rafabene.com/>http://rafabene.com/</a>.
+ *
+ * and
+ *
+ * ceposta
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
 public class ResponseDTO {

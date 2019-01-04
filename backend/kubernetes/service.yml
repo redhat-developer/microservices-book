@@ -4,6 +4,7 @@ metadata:
   name: backend
   labels:
     app: backend
+    book: microservices4javadev
 spec:
   ports:
   - name: http
