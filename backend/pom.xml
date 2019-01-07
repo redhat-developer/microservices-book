@@ -138,6 +138,11 @@
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <env>
+                        <JAEGER_SERVICE_NAME>backend</JAEGER_SERVICE_NAME>
+                    </env>
+                </configuration>
             </plugin>
         </plugins>
     </build>
