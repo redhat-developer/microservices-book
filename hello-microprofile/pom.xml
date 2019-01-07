@@ -60,7 +60,7 @@
 
         <dependency>
             <groupId>io.thorntail</groupId>
-            <artifactId>microprofile-restclient</artifactId>
+            <artifactId>jaxrs</artifactId>
         </dependency>
 
         <dependency>

@@ -8,9 +8,6 @@ import io.opentracing.propagation.*;
 import org.eclipse.microprofile.config.inject.*;
 import org.eclipse.microprofile.faulttolerance.*;
 import org.eclipse.microprofile.opentracing.*;
-import org.eclipse.microprofile.rest.client.*;
-import org.jboss.resteasy.plugins.providers.*;
-import org.jboss.resteasy.spi.*;
 
 import javax.inject.*;
 import javax.ws.rs.*;
