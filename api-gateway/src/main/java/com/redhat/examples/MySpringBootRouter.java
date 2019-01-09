@@ -34,13 +34,13 @@ public class MySpringBootRouter extends RouteBuilder {
     @Override
     public void configure() {
         from("direct:microprofile").streamCaching()
-                .to(String.format(REST_ENDPOINT, microprofilesvcurl))
+                .toF(REST_ENDPOINT, microprofilesvcurl)
                 .log("Response from Microprofile microservice: ${body}")
                 .convertBodyTo(String.class)
                 .end();
 
         from("direct:springboot").streamCaching()
-                .to(String.format(REST_ENDPOINT, springbootsvcurl))
+                .toF(REST_ENDPOINT, springbootsvcurl)
                 .log("Response from Spring Boot microservice: ${body}")
                 .convertBodyTo(String.class)
                 .end();
