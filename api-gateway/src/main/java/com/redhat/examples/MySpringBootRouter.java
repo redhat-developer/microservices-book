@@ -29,19 +29,23 @@ public class MySpringBootRouter extends RouteBuilder {
 
     private static final String REST_ENDPOINT=
             "http4:%s/api/greeting?httpClient.connectTimeout=1000" +
-                    "&bridgeEndpoint=true&copyHeaders=true&connectionClose=true";
+                    "&bridgeEndpoint=true" +
+                    "&copyHeaders=true" +
+                    "&connectionClose=true";
 
     @Override
     public void configure() {
         from("direct:microprofile").streamCaching()
                 .toF(REST_ENDPOINT, microprofilesvcurl)
-                .log("Response from Microprofile microservice: ${body}")
+                .log("Response from Microprofile microservice: " +
+                        "${body}")
                 .convertBodyTo(String.class)
                 .end();
 
         from("direct:springboot").streamCaching()
                 .toF(REST_ENDPOINT, springbootsvcurl)
-                .log("Response from Spring Boot microservice: ${body}")
+                .log("Response from Spring Boot microservice: " +
+                        "${body}")
                 .convertBodyTo(String.class)
                 .end();
 

@@ -73,7 +73,8 @@ public class BackendHttpServlet extends HttpServlet {
         String greeting = req.getParameter("greeting");
 
         ResponseDTO response = new ResponseDTO();
-        response.setGreeting(greeting + " from cluster Backend");
+        response.setGreeting(greeting +
+                " from cluster Backend");
         response.setTime(System.currentTimeMillis());
         response.setIp(getIp());
 
