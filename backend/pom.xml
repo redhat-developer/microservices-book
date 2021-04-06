@@ -114,7 +114,7 @@
         <dependency>
             <groupId>io.jaegertracing</groupId>
             <artifactId>jaeger-client</artifactId>
-            <version>0.32.0</version>
+            <version>1.5.0</version>
         </dependency>
 
     </dependencies>

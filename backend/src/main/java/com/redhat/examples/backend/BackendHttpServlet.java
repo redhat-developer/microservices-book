@@ -42,12 +42,13 @@ import java.util.*;
 @WebServlet(urlPatterns = {"/api/backend"})
 public class BackendHttpServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 4006299593098166183L;
+
     private Tracer tracer = TracerResolver.resolveTracer();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
         //Place the HTTP headers in a Hashmap
         final HashMap<String, String> headers = new HashMap<String, String>();
         Enumeration<String> headerNames = req.getHeaderNames();
@@ -56,33 +57,36 @@ public class BackendHttpServlet extends HttpServlet {
             String value = req.getHeader(name);
             headers.put(name, value);
         }
+
         //Extract the Parent Span from the headers
         SpanContext parentSpan = tracer
                 .extract(Format.Builtin.HTTP_HEADERS,
-                        new TextMapExtractAdapter(headers));
+                    new TextMapAdapter(headers));
 
         //Start a new Span as a Child of the Parent Span
-        Scope scope = tracer
+        Span span = tracer
                 .buildSpan("backend-servlet")
                 .asChildOf(parentSpan)
-                .startActive(true);
+                .start();
 
-        resp.setContentType("application/json");
+        try (Scope scope = tracer.scopeManager().activate(span)) {
+            resp.setContentType("application/json");
 
-        ObjectMapper mapper = new ObjectMapper();
-        String greeting = req.getParameter("greeting");
-
-        ResponseDTO response = new ResponseDTO();
-        response.setGreeting(greeting +
-                " from cluster Backend");
-        response.setTime(System.currentTimeMillis());
-        response.setIp(getIp());
-
-        PrintWriter out = resp.getWriter();
-        mapper.writerWithDefaultPrettyPrinter()
-                .writeValue(out, response);
-
-        scope.span().finish();
+            ObjectMapper mapper = new ObjectMapper();
+            String greeting = req.getParameter("greeting");
+    
+            ResponseDTO response = new ResponseDTO();
+            response.setGreeting(greeting +
+                    " from cluster Backend");
+            response.setTime(System.currentTimeMillis());
+            response.setIp(getIp());
+    
+            PrintWriter out = resp.getWriter();
+            mapper.writerWithDefaultPrettyPrinter()
+                    .writeValue(out, response);
+        } finally {
+            span.finish();
+        }
     }
 
     private String getIp() {
