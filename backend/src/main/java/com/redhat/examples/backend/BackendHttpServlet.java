@@ -50,8 +50,6 @@ public class BackendHttpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        System.out.println("Calling backend service");
-        
         //Place the HTTP headers in a Hashmap
         final HashMap<String, String> headers = new HashMap<String, String>();
         Enumeration<String> headerNames = req.getHeaderNames();
