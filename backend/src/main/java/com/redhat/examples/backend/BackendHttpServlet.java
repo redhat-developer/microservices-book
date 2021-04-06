@@ -49,7 +49,6 @@ public class BackendHttpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
         //Place the HTTP headers in a Hashmap
         final HashMap<String, String> headers = new HashMap<String, String>();
         Enumeration<String> headerNames = req.getHeaderNames();
